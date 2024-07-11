@@ -256,6 +256,7 @@ return grpc_client
 
 ---@class grpc_client.h2.Conn
 ---@field new_stream fun(self: self): grpc_client.h2.Stream
+---@field ping fun(self: self, timeout_secs: integer)
 
 ---@class grpc_client.cqueues.Loop
 ---@field loop function
