@@ -16,6 +16,7 @@ local Client = {}
 ---Create a new gRPC client that connects to the socket specified with `sock_args`.
 ---See `socket.connect` in the cqueues manual for more information.
 ---
+---@nodiscard
 ---@param sock_args table A table of named arguments from `cqueues.socket.connect`
 ---@return grpc_client.Client
 function grpc_client.new(sock_args)
@@ -75,6 +76,8 @@ end
 
 ---Perform a unary request.
 ---
+---@nodiscard
+---
 ---@param request_specifier grpc_client.RequestSpecifier
 ---@param data table The message to send. This should be in the structure of `request_specifier.request`.
 ---
@@ -124,6 +127,8 @@ end
 ---Perform a server-streaming request.
 ---
 ---`callback` will be called with every streamed response.
+---
+---@nodiscard
 ---
 ---@param request_specifier grpc_client.RequestSpecifier
 ---@param data table The message to send. This should be in the structure of `request_specifier.request`.
@@ -187,6 +192,14 @@ function Client:server_streaming_request(request_specifier, data, callback)
 	return nil
 end
 
+---Perform a bidirectional-streaming request.
+---
+---`callback` will be called with every streamed response.
+---
+---The raw client-to-server stream is returned to allow you to send encoded messages.
+---
+---@nodiscard
+---
 ---@param request_specifier grpc_client.RequestSpecifier
 ---@param data table The message to send. This should be in the structure of `request_specifier.request`.
 ---@param callback fun(response: table, stream: grpc_client.h2.Stream) A callback that will be run with every response
