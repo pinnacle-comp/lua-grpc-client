@@ -102,7 +102,9 @@ function Client:unary_request(request_specifier, data)
 		local grpc_status = tonumber(grpc_status)
 		if grpc_status ~= 0 then
 			local err_name = require("grpc_client.status").name(grpc_status)
-			local err_str = "error from response: " .. (err_name or "unknown grpc status code")
+			local grpc_msg = headers:get("grpc-message")
+			local grpc_msg = grpc_msg and (", msg = " .. grpc_msg) or ""
+			local err_str = "error from response: code = " .. (err_name or "unknown grpc status code") .. grpc_msg
 			return nil, err_str
 		end
 	end
