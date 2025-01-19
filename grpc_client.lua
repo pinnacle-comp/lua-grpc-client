@@ -203,23 +203,18 @@ end
 ---@nodiscard
 ---
 ---@param request_specifier grpc_client.RequestSpecifier
----@param data table The message to send. This should be in the structure of `request_specifier.request`.
 ---@param callback fun(response: table, stream: grpc_client.h2.Stream) A callback that will be run with every response
 ---
 ---@return grpc_client.h2.Stream|nil
 ---@return string|nil error An error string, if any.
-function Client:bidirectional_streaming_request(request_specifier, data, callback)
+function Client:bidirectional_streaming_request(request_specifier, callback)
 	local stream = self.conn:new_stream()
 
 	local service = request_specifier.service
 	local method = request_specifier.method
-	local request_type = request_specifier.request
 	local response_type = request_specifier.response
 
-	local body = encode(request_type, data)
-
 	stream:write_headers(create_request_headers(service, method), false)
-	stream:write_chunk(body, false)
 
 	local headers = stream:get_headers()
 	local grpc_status = headers:get("grpc-status")
